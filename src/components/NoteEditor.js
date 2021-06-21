@@ -1,8 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+// Try the useHistory on the cancel button
+import { useHistory, useParams, Link } from 'react-router-dom'
 
-function NoteEditor({ note, toggleEditMode }) {
-  const [noteTitle, setNoteTitle] = useState(note.title)
-  const [noteBody, setNoteBody] = useState(note.body)
+function NoteEditor({ note, toggleEditMode, noteParam, setNote, isLoaded, setIsLoaded}) {
+  const [noteTitle, setNoteTitle] = useState(noteParam.title)
+  const [noteBody, setNoteBody] = useState(noteParam.body)
+
+    // Param attempt with useEffect)
+    const id = useParams().id
+
+    useEffect(() => {
+      fetch(`http://localhost:3000/notes/${id}`)
+        .then((r) => r.json())
+        .then((note) => {
+          setNote(note);
+          setIsLoaded(true);
+        });
+    }, [id]);
+  
+    if (!isLoaded) return <h2>Loading...</h2>
+
+  // Comment out history for now, and circle back. Get Link attempt to work  
+  // const history = useHistory();
+
+  // function handleBack() {
+  //   history.goBack()
+  // }
 
   const handleNoteSubmit = (e) => {
     e.preventDefault()
@@ -21,6 +44,8 @@ function NoteEditor({ note, toggleEditMode }) {
     })
     note.title = noteTitle
     note.body = noteBody
+    // history.push(`/note/view/:${id}`)
+
     toggleEditMode(false)
   }
 
@@ -35,8 +60,11 @@ function NoteEditor({ note, toggleEditMode }) {
       <input type="text" name="title" onChange={(e) => setNoteTitle(e.target.value)} value={noteTitle}/>
       <textarea name="body" onChange={(e) => setNoteBody(e.target.value)} value={noteBody}/>
       <div className="button-row">
-        <input className="button" type="submit" value="Save" onClick={(e) => handleNoteSubmit(e)} />
-        <button onClick={handleNoteCancel} type="button">Cancel</button>
+        <Link className="input"  className="button" type="submit" value="Save" onClick={(e) => handleNoteSubmit(e)} />
+        {/* OG button <input className="button" type="submit" value="Save" onClick={(e) => handleNoteSubmit(e)} /> */}
+        <Link className="button" to={`/note/view/${id}`} >Cancel</Link>
+        {/* History attempt <button onClick={handleBack} type="button">Cancel</button> */}
+        {/* OG button <button onClick={handleNoteCancel} type="button">Cancel</button> */}
       </div>
     </form>
   );

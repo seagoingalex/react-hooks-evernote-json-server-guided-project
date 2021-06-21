@@ -6,8 +6,8 @@ function Sidebar({ notesArray, onClickSidebarNote, setNotesArray }) {
   const handleNewNote = () => {
     let newNote = {
       userId: 1,
-      title: "default",
-      body: "placeholder"
+      title: `New Note`,
+      body: "Enter your notes here"
     }
     setNotesArray([...notesArray, newNote])
     fetch("http://localhost:3000/notes", {
