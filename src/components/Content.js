@@ -36,12 +36,11 @@ function Content({ presentationNote, isPresentationMode, toggleEditMode, isEditM
     <>
       <div className="master-detail-element detail">
       <Switch>
-          {/* <Route exact path="/" component={() => <Instructions /> }  /> */}
-          <Route path="/note/view/:id" component={() => <NoteViewer note={noteParam} onClickEditNote={onClickEditNote} noteParam={noteParam} setNote={setNote} isLoaded={isLoaded} setIsLoaded={setIsLoaded}/> } />
-          <Route path="/note/edit/:id" omponent={() => <NoteEditor note={noteParam} toggleEditMode={toggleEditMode} noteParam={noteParam} setNote={setNote} isLoaded={isLoaded} setIsLoaded={setIsLoaded}/> } />
-          
+          <Route exact path="/" component={() => <Instructions /> }  />
+          <Route exact path="/note/view/:id" component={() => <NoteViewer note={noteParam} onClickEditNote={onClickEditNote} noteParam={noteParam} setNote={setNote} isLoaded={isLoaded} setIsLoaded={setIsLoaded}/> } />
+          <Route exact path="/note/edit/:id" component={() => <NoteEditor note={noteParam} toggleEditMode={toggleEditMode} noteParam={noteParam} setNote={setNote} isLoaded={isLoaded} setIsLoaded={setIsLoaded}/> } />
       </Switch>
-      <Instructions />
+      {/* <Instructions /> */}
         {/* Before the switch statement >> {getContent()} */}
       </div>;
     </>

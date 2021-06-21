@@ -47,7 +47,6 @@ function NoteContainer() {
   return (
     <>
       <div className="app">
-      <Header />
       <Search setSearch={setSearch} searchTerm={searchTerm} />
       <div className="container">
         <Sidebar notesArray={notesToDisplay} onClickSidebarNote={onClickSidebarNote} setNotesArray={setNotesArray}/>

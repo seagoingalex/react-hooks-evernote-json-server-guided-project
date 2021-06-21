@@ -3,38 +3,47 @@ import React, { useState, useEffect } from "react";
 import { useHistory, useParams, Link } from 'react-router-dom'
 
 function NoteEditor({ note, toggleEditMode, noteParam, setNote, isLoaded, setIsLoaded}) {
-  const [noteTitle, setNoteTitle] = useState(noteParam.title)
-  const [noteBody, setNoteBody] = useState(noteParam.body)
+  const [noteParamEdit, setNoteEdit] = useState(null);
+  const [isLoadedEdit, setIsLoadedEdit] = useState(false)
+  const [noteTitle, setNoteTitle] = useState(null)
+  const [noteBody, setNoteBody] = useState(null)
+
+  
+  // Comment out history for now, and circle back. Get Link attempt to work 
+  const history = useHistory();
+
+  function handleBack() {
+    history.goBack()
+  }
 
     // Param attempt with useEffect)
-    const id = useParams().id
+    // const id = useParams().id
+    const { id } = useParams()
 
     useEffect(() => {
       fetch(`http://localhost:3000/notes/${id}`)
         .then((r) => r.json())
         .then((note) => {
-          setNote(note);
-          setIsLoaded(true);
+          setNoteEdit(note);
+          setNoteTitle(note.title)
+          setNoteBody(note.body)
+          setIsLoadedEdit(true);
         });
     }, [id]);
+
+
   
-    if (!isLoaded) return <h2>Loading...</h2>
-
-  // Comment out history for now, and circle back. Get Link attempt to work  
-  // const history = useHistory();
-
-  // function handleBack() {
-  //   history.goBack()
-  // }
+    if (!isLoadedEdit) return <h2>Loading...</h2>
+ 
 
   const handleNoteSubmit = (e) => {
     e.preventDefault()
     let editedNote = {
-      userId: note.userId,
+      userId: noteParamEdit.userId,
       title: noteTitle,
       body: noteBody
     }
-    fetch(`http://localhost:3000/notes/${note.id}`, {
+    fetch(`http://localhost:3000/notes/${id}`, {
       method: "PATCH",
       headers: {
         'Content-Type': 'application/json',
@@ -44,7 +53,7 @@ function NoteEditor({ note, toggleEditMode, noteParam, setNote, isLoaded, setIsL
     })
     note.title = noteTitle
     note.body = noteBody
-    // history.push(`/note/view/:${id}`)
+    history.push(`/note/view/${id}`)
 
     toggleEditMode(false)
   }
@@ -60,11 +69,11 @@ function NoteEditor({ note, toggleEditMode, noteParam, setNote, isLoaded, setIsL
       <input type="text" name="title" onChange={(e) => setNoteTitle(e.target.value)} value={noteTitle}/>
       <textarea name="body" onChange={(e) => setNoteBody(e.target.value)} value={noteBody}/>
       <div className="button-row">
-        <Link className="input"  className="button" type="submit" value="Save" onClick={(e) => handleNoteSubmit(e)} />
-        {/* OG button <input className="button" type="submit" value="Save" onClick={(e) => handleNoteSubmit(e)} /> */}
-        <Link className="button" to={`/note/view/${id}`} >Cancel</Link>
-        {/* History attempt <button onClick={handleBack} type="button">Cancel</button> */}
-        {/* OG button <button onClick={handleNoteCancel} type="button">Cancel</button> */}
+        {/* <Link className="input"  className="button" type="submit" value="Save" onClick={(e) => handleNoteSubmit(e)} /> */}
+        <input className="button" type="submit" value="Save" onClick={(e) => handleNoteSubmit(e)} />
+        {/* <Link className="button" to={`/note/view/${id}`} >Cancel</Link> */}
+        <button onClick={handleBack} type="button">Cancel</button>
+        {/* <button onClick={handleNoteCancel} type="button">Cancel</button> */}
       </div>
     </form>
   );

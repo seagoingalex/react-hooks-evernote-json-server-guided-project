@@ -12,28 +12,33 @@ function NoteViewer({ note, onClickEditNote, noteParam, setNote, isLoaded, setIs
   // const [noteParam, setNote] = useState(null);
   // const [isLoaded, setIsLoaded] = useState(false)
 
+  const [noteParamView, setNoteView] = useState(null);
+  const [isLoadedView, setIsLoadedView] = useState(false)
+
 
   // Param attempt with useEffect)
-  const id = useParams().id
+  // const id = useParams().id
+  const { id } = useParams()
 
   useEffect(() => {
     fetch(`http://localhost:3000/notes/${id}`)
       .then((r) => r.json())
       .then((note) => {
-        setNote(note);
-        setIsLoaded(true);
+        setNoteView(note);
+        // setNote(note)
+        setIsLoadedView(true);
       });
   }, [id]);
 
-  if (!isLoaded) return <h2>Loading...</h2>
+  if (!isLoadedView) return <h2>Loading...</h2>
 
-  
+  console.log(note)
 
   return (
     <>
-      <h2>{note.title}</h2>
-      <p>{note.body}</p>
-      <Link className="button" to={`/note/edit/${id}`} onClick={onClickEditNote}>Edit</Link>
+      <h2>{noteParamView.title}</h2>
+      <p>{noteParamView.body}</p>
+      <Link className="button" to={`/note/edit/${id}`}>Edit</Link>
       {/* <button onClick={onClickEditNote}>Edit</button> */}
     </>
   );
