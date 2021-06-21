@@ -10,12 +10,18 @@ import Instructions from "./Instructions";
           Then complete the rest of your app before attempting to
           refactor to get this Content component to work.
 */
-function Content() {
+function Content({ presentationNote, isPresentationMode, toggleEditMode, isEditMode }) {
+
+  const onClickEditNote = () => {
+    console.log(isEditMode)
+    toggleEditMode(true)
+  }
+
   const getContent = () => {
-    if (false) {
-      return <NoteEditor />;
-    } else if (false) {
-      return <NoteViewer />;
+    if (isEditMode) {
+      return <NoteEditor note={presentationNote} toggleEditMode={toggleEditMode}/>;
+    } else if (isPresentationMode) {
+      return <NoteViewer note={presentationNote} onClickEditNote={onClickEditNote} />;
     } else {
       return <Instructions />;
     }

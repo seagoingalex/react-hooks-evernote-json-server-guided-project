@@ -1,11 +1,11 @@
 import React from "react";
 import NoteItem from "./NoteItem";
 
-function NoteList() {
+function NoteList( {notesArray, onClickSidebarNote} ) {
   return (
     <ul>
-      {/* Render list of notes here... */}
-      <NoteItem />
+      {notesArray.map(note => <NoteItem key={note.id} note={note} onClickSidebarNote={onClickSidebarNote}/>)}
+      {/* <NoteItem /> */}
     </ul>
   );
 }
